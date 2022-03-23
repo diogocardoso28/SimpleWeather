@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Weather</string>
+    <string name="title_settings">Deinições</string>
+    <string name="title_notifications">Notificações</string>
+    <string name="refreshbutton">atualizar</string>
+    <string name="errorMessage">Erro!</string>
+    <string name="title_home">Visao Geral</string>
+    <string name="languageId">pt</string>
+</resources>

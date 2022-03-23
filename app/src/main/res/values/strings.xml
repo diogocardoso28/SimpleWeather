@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Simple Weather</string>
+    <string name="title_home">Home</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="refreshbutton">RefreshButton</string>
+    <string name="errorMessage">Error!</string>
+    <string name="languageId">en</string>
+</resources>
