@@ -1,6 +1,7 @@
 package com.diogo.weatherapp.ui.home
 
 import android.provider.Settings.Global.getString
+import com.diogo.weatherapp.BuildConfig
 import com.diogo.weatherapp.R
 import com.google.gson.annotations.SerializedName
 import retrofit2.Response
@@ -140,7 +141,7 @@ class WeatherData(apiKey: String) {
     )
 
     interface WeatherApi {
-        @GET("/data/2.5/onecall?lat=39.7495&lon=8.8077&appid=28c0b3908568301c3399083982a34e36")
+        @GET("/data/2.5/onecall?lat=39.7495&lon=8.8077&appid=${BuildConfig.OWM_KEY}")
         suspend fun getWeather(
             @Query("lang") langId: String? = "en",
             @Query("units") units: String? = "metric",
