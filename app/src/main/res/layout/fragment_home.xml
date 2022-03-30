@@ -17,9 +17,10 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.433"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.367"
+        app:layout_constraintVertical_bias="0.469"
         tools:visibility="invisible" />
 
     <androidx.cardview.widget.CardView
@@ -93,8 +94,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/currentMain"
@@ -128,6 +128,29 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/dailyWeatherContainer"
+        android:layout_width="349dp"
+        android:layout_height="360dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.81">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:paddingBottom="15sp" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

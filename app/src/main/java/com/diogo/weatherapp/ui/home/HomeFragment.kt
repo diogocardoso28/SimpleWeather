@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.diogo.weatherapp.R
 import com.diogo.weatherapp.databinding.FragmentHomeBinding
 import com.squareup.picasso.Picasso
@@ -17,6 +18,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
+import androidx.recyclerview.widget.RecyclerView
 
 
 @DelicateCoroutinesApi
@@ -59,12 +61,16 @@ class HomeFragment : Fragment() {
 
         }
     }
+
     private fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it ->
         it.replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(
-            Locale.getDefault()
-        ) else it.toString()
-    } }
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
+    }
+
+
 
     private fun updateUi() {
         try {
@@ -84,16 +90,17 @@ class HomeFragment : Fragment() {
                 val locationBody = locationResult.body()?.get(0)
                 Log.d("location", locationResult.body().toString())
 
+
                 //Sets latitude and longitude based on provided city
                 val lat: Double? = locationBody?.lat
                 val lon: Double? = locationBody?.lon
 
                 //Reads current language and calls one call api to get weather data
                 val languageID: String = getString(R.string.languageId)
-                val result = weatherApi.getWeather(lat, lon, languageID)
+                val weatherResult = weatherApi.getWeather(lat, lon, languageID)
 
                 //Check if it got something
-                val body = result.body()
+                val body = weatherResult.body()
                 //Logs Response to logcat
                 Log.d("WeatherData ", body.toString())
                 Log.d("Current", body?.current?.weather.toString())
@@ -107,7 +114,8 @@ class HomeFragment : Fragment() {
                     binding.currentMain.text = currentWeatherText.capitalizeWords()
 
                     //Display Current temperature
-                    (body?.current?.temp?.roundToInt()?.toString() + "º").also { binding.currentTemperature.text = it }
+                    (body?.current?.temp?.roundToInt()
+                        ?.toString() + "º").also { binding.currentTemperature.text = it }
 
                     //Put Icon in imageView
                     val icon: String =
@@ -119,6 +127,19 @@ class HomeFragment : Fragment() {
                         .resize(300, 300)
                         .into(binding.weatherIcon)
 
+
+                    //Puts rest of the week
+                    val rvDaily = binding.recyclerView as RecyclerView
+
+                    val daily = body?.daily
+                    if (daily != null) {
+                        daily.removeAt(0)
+                    }
+
+                    val adapter = DailyAdapter(daily)
+
+                    rvDaily.adapter = adapter
+                    rvDaily.layoutManager = LinearLayoutManager(context)
 
                     //Shows elements after grabbing data
                     binding.currentWeatherCard.visibility = View.VISIBLE
