@@ -18,6 +18,10 @@ import com.squareup.picasso.Picasso
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.TextStyle
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 data class Daily(
 
@@ -38,18 +42,22 @@ data class Daily(
     var weather: ArrayList<WeatherData.Weather> = arrayListOf(),
     var clouds: Int? = null,
     var pop: Double? = null,
-     var uvi: Float? = null
+    var uvi: Float? = null
 
 )
 
-class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) : RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
-        // Provide a direct reference to each of the views within a data item
+class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) :
+    RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
+    // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
         val weekDayTextView = itemView.findViewById<TextView>(R.id.weekDay)
         val iconImageView = itemView.findViewById<ImageView>(R.id.dailyIcon)
+        val minimumTemperature = itemView.findViewById<TextView>(R.id.minTemp)
+        val maximumTemperature = itemView.findViewById<TextView>(R.id.maxTemp)
+        //val rainPercentage = itemView.findViewById<TextView>(R.id.rainPercent)
     }
 
     // ... constructor and member variables
@@ -69,9 +77,15 @@ class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) : Recycler
     override fun onBindViewHolder(viewHolder: DailyAdapter.ViewHolder, position: Int) {
         // Get the data model based on position2
         val daily: WeatherData.Daily = mDaily?.get(position) ?: WeatherData.Daily()
+
         // Set item views based on your views and data model
-        val textView = viewHolder.weekDayTextView
+        val weekDayTextView = viewHolder.weekDayTextView
         val imageView = viewHolder.iconImageView
+        val minimumTemperatureTextView = viewHolder.minimumTemperature
+        val maximumTemperatureTextView = viewHolder.maximumTemperature
+
+        // val rainPercentageTextView = viewHolder.rainPercentage
+
         val longDt = daily.dt?.toLong()
         val dt = longDt?.let {
             Instant.ofEpochSecond(it)
@@ -79,11 +93,19 @@ class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) : Recycler
                 .toLocalDateTime()
         }
         if (dt != null) {
-            textView.setText(dt.dayOfWeek.toString())
+
+            weekDayTextView.text = dt.dayOfWeek.getDisplayName(
+                TextStyle.SHORT,
+                Locale.getDefault()
+            )
         } else {
-            textView.setText("error")
+            weekDayTextView.setText("error")
         }
 
+        minimumTemperatureTextView.text = daily.temp?.min?.roundToInt().toString() + "º"
+        maximumTemperatureTextView.text = daily.temp?.max?.roundToInt().toString() + "º"
+
+        //Load image to container
         val icon = daily.weather.get(0).icon.toString()
 
         val imageURL = "https://openweathermap.org/img/wn/$icon@2x.png"
@@ -93,9 +115,6 @@ class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) : Recycler
             .load(imageURL)
             .resize(200, 200)
             .into(imageView)
-       // val button = viewHolder.messageButton
-       // button.text = if (contact.isOnline) "Message" else "Offline"
-        //button.isEnabled = contact.isOnline
     }
 
     // Returns the total count of items in the list

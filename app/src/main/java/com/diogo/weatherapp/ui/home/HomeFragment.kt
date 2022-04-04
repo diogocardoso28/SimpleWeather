@@ -132,6 +132,7 @@ class HomeFragment : Fragment() {
                     val rvDaily = binding.recyclerView as RecyclerView
 
                     val daily = body?.daily
+                    //Removes today's weather from the list
                     if (daily != null) {
                         daily.removeAt(0)
                     }

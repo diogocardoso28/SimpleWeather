@@ -43,7 +43,9 @@ class WeatherData {
         @SerializedName("weather") var weather: ArrayList<Weather> = arrayListOf(),
         @SerializedName("clouds") var clouds: Int? = null,
         @SerializedName("pop") var pop: Double? = null,
-        @SerializedName("uvi") var uvi: Float? = null
+        @SerializedName("uvi") var uvi: Float? = null,
+        @SerializedName("rain") var rain: Float? = null
+
 
     )
 
