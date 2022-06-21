@@ -48,6 +48,9 @@ data class Daily(
 
 class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) :
     RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
+    var onItemClick: ((WeatherData) -> Unit)? = null
+    var weatherData = null;
+
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,6 +61,12 @@ class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) :
         val minimumTemperature = itemView.findViewById<TextView>(R.id.minTemp)
         val maximumTemperature = itemView.findViewById<TextView>(R.id.maxTemp)
         //val rainPercentage = itemView.findViewById<TextView>(R.id.rainPercent)
+
+        init {
+            itemView.setOnClickListener {
+                weatherData?.let { it1 -> onItemClick?.invoke(it1) };
+            }
+        }
     }
 
     // ... constructor and member variables

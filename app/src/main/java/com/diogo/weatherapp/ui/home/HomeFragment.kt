@@ -26,7 +26,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -45,6 +44,7 @@ class HomeFragment : Fragment() {
         //Updates ui after page loads
         updateUi()
 
+        //Bind Click
         return root
     }
 
@@ -86,6 +86,7 @@ class HomeFragment : Fragment() {
                 //Gets coordinates based on city
                 val city = "Lisboa"
                 val locationResult = locationApi.getCoordinatesForLocation(city)
+
                 //Parses body
                 val locationBody = locationResult.body()?.get(0)
                 Log.d("location", locationResult.body().toString())
@@ -139,9 +140,11 @@ class HomeFragment : Fragment() {
 
                     val adapter = DailyAdapter(daily)
 
+
                     rvDaily.adapter = adapter
                     rvDaily.layoutManager = LinearLayoutManager(context)
 
+                   // rvDaily.setOnItemClickListener {}
                     //Shows elements after grabbing data
                     binding.currentWeatherCard.visibility = View.VISIBLE
                     hideLoader()

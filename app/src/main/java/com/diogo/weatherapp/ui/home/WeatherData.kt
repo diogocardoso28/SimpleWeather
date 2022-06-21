@@ -25,7 +25,6 @@ object RetrofitHelper {
 class WeatherData {
 
     data class Daily(
-
         @SerializedName("dt") var dt: Int? = null,
         @SerializedName("sunrise") var sunrise: Int? = null,
         @SerializedName("sunset") var sunset: Int? = null,
