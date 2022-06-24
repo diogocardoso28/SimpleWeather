@@ -1,5 +1,6 @@
 package com.diogo.weatherapp.ui.home
 
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -19,6 +20,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
 import androidx.recyclerview.widget.RecyclerView
+import java.security.AccessController.getContext
+import java.time.Instant
 
 
 @DelicateCoroutinesApi
@@ -133,13 +136,20 @@ class HomeFragment : Fragment() {
                     val rvDaily = binding.recyclerView as RecyclerView
 
                     val daily = body?.daily
+
                     //Removes today's weather from the list
-                    if (daily != null) {
-                        daily.removeAt(0)
-                    }
+                    daily?.removeAt(0)
 
                     val adapter = DailyAdapter(daily)
-
+                    
+                    //Handles item click
+                    adapter.onItemClick = { daily ->
+                        val longDt = daily.dt?.toLong()
+                       // val stamp = Timestamp(System.currentTimeMillis())
+                        val date = longDt?.let { Date(it) };
+                        Toast.makeText(context,date.toString(), Toast.LENGTH_LONG).show();
+                        //Log.d("CLICK",daily.dt.toString());
+                    }
 
                     rvDaily.adapter = adapter
                     rvDaily.layoutManager = LinearLayoutManager(context)

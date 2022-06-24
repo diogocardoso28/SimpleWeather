@@ -48,8 +48,8 @@ data class Daily(
 
 class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) :
     RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
-    var onItemClick: ((WeatherData) -> Unit)? = null
-    var weatherData = null;
+    var onItemClick: ((WeatherData.Daily) -> Unit)? = null
+    var weatherData: ArrayList<WeatherData.Daily>? = mDaily;
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
@@ -64,7 +64,8 @@ class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) :
 
         init {
             itemView.setOnClickListener {
-                weatherData?.let { it1 -> onItemClick?.invoke(it1) };
+                //TODO: This might be fucked
+                onItemClick?.invoke(weatherData?.get(adapterPosition) ?: WeatherData.Daily());
             }
         }
     }
