@@ -1,6 +1,6 @@
 package com.diogo.weatherapp.ui.home
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -11,17 +11,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.diogo.weatherapp.DetailedViewActivity
 import com.diogo.weatherapp.R
 import com.diogo.weatherapp.databinding.FragmentHomeBinding
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
-import androidx.recyclerview.widget.RecyclerView
-import java.security.AccessController.getContext
-import java.time.Instant
 
 
 @DelicateCoroutinesApi
@@ -57,11 +57,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun getName(names: WeatherData.LocalNames, languageId: String): String {
-        return if (languageId == "pt") {
+        //Todo: better handle local names
+        return if (languageId == "pt" || names.en==null) {
             names.pt.toString()
         } else {
             names.en.toString()
-
         }
     }
 
@@ -87,7 +87,7 @@ class HomeFragment : Fragment() {
 
                 binding.loader.visibility = View.VISIBLE
                 //Gets coordinates based on city
-                val city = "Lisboa"
+                val city = "Leiria"
                 val locationResult = locationApi.getCoordinatesForLocation(city)
 
                 //Parses body
@@ -144,11 +144,9 @@ class HomeFragment : Fragment() {
                     
                     //Handles item click
                     adapter.onItemClick = { daily ->
-                        val longDt = daily.dt?.toLong()
-                       // val stamp = Timestamp(System.currentTimeMillis())
-                        val date = longDt?.let { Date(it) };
-                        Toast.makeText(context,date.toString(), Toast.LENGTH_LONG).show();
-                        //Log.d("CLICK",daily.dt.toString());
+                        val intent:Intent = DetailedViewActivity.createIntent(context, //Create intent
+                            Gson().toJson(daily)); //Convert clicked data into gson to be passed to new activity
+                        startActivity(intent);
                     }
 
                     rvDaily.adapter = adapter

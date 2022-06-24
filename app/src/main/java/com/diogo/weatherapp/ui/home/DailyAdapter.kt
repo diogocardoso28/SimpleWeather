@@ -3,6 +3,7 @@ package com.diogo.weatherapp.ui.home
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,7 +66,8 @@ class DailyAdapter(private val mDaily: ArrayList<WeatherData.Daily>?) :
         init {
             itemView.setOnClickListener {
                 //TODO: This might be fucked
-                onItemClick?.invoke(weatherData?.get(adapterPosition) ?: WeatherData.Daily());
+                val daily: WeatherData.Daily = mDaily?.get(adapterPosition) ?: WeatherData.Daily()
+                onItemClick?.invoke(daily);
             }
         }
     }

@@ -44,8 +44,6 @@ class WeatherData {
         @SerializedName("pop") var pop: Double? = null,
         @SerializedName("uvi") var uvi: Float? = null,
         @SerializedName("rain") var rain: Float? = null
-
-
     )
 
     data class FeelsLike(
