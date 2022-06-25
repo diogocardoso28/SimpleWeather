@@ -7,4 +7,5 @@
     <string name="errorMessage">Erro!</string>
     <string name="title_home">Visao Geral</string>
     <string name="languageId">pt</string>
+    <string name="line_separator">Separador</string>
 </resources>

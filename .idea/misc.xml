@@ -20,6 +20,11 @@
         <entry key="..\:/Users/diogo/AndroidStudioProjects/WeatherApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.4" />
         <entry key="..\:/Users/diogo/AndroidStudioProjects/WeatherApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3995" />
         <entry key="..\:/Users/diogo/AndroidStudioProjects/WeatherApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3995" />
+        <entry key="..\:/Users/diogo/StudioProjects/SimpleWeather/app/src/main/res/drawable/ic_lineseparator.xml" value="0.3995" />
+        <entry key="..\:/Users/diogo/StudioProjects/SimpleWeather/app/src/main/res/layout/activity_detailed_view.xml" value="0.536" />
+        <entry key="..\:/Users/diogo/StudioProjects/SimpleWeather/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Users/diogo/StudioProjects/SimpleWeather/app/src/main/res/layout/daily_weather_layout.xml" value="0.4" />
+        <entry key="..\:/Users/diogo/StudioProjects/SimpleWeather/app/src/main/res/layout/fragment_home.xml" value="0.4" />
       </map>
     </option>
   </component>

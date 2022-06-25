@@ -6,4 +6,5 @@
     <string name="refreshbutton">RefreshButton</string>
     <string name="errorMessage">Error!</string>
     <string name="languageId">en</string>
+    <string name="line_separator">Line Separator</string>
 </resources>
