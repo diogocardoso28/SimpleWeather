@@ -5,18 +5,16 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import com.diogo.weatherapp.databinding.FragmentHomeBinding
 import com.diogo.weatherapp.ui.home.WeatherData
 import com.google.gson.Gson
-import java.text.DateFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 
 class DetailedViewActivity : AppCompatActivity() {
@@ -32,8 +30,10 @@ class DetailedViewActivity : AppCompatActivity() {
         val minTemperatureTextView: TextView = findViewById<TextView>(R.id.minTemperature);
         val maxTemperatureTextView: TextView = findViewById<TextView>(R.id.maxTemperature);
         val dailyDateTextView: TextView = findViewById<TextView>(R.id.dailyDate);
+        val iconImageView: ImageView = findViewById<ImageView>(R.id.iconImageView);
 
         val longDt = daily.dt?.toLong() //Gets epoch time stamp
+        val icon = daily.weather.get(0).icon.toString()
         //Parses it
         val dt = longDt?.let {
             Instant.ofEpochSecond(it)
@@ -43,10 +43,18 @@ class DetailedViewActivity : AppCompatActivity() {
 
         //Put data on to XML
         if (dt != null) {
-            dailyDateTextView.text = dt.format(DateTimeFormatter.ofPattern("d, MMM yyyy"))
+            dailyDateTextView.text = dt.format(DateTimeFormatter.ofPattern("EEEE ,d MMMM"))
         };
-        minTemperatureTextView.text = daily.temp?.max.toString() + "º";
-        maxTemperatureTextView.text = daily.temp?.min.toString() + "º";
+        minTemperatureTextView.text = daily.temp?.max?.roundToInt().toString() + "º";
+        maxTemperatureTextView.text = daily.temp?.min?.roundToInt().toString() + "º";
+
+        val context: Context = iconImageView.context
+
+        Log.d("ICON", icon);
+
+        val id = context.resources.getIdentifier("ic_" + icon, "drawable", context.packageName)
+        iconImageView.setImageResource(id)
+
     }
 
     companion object {

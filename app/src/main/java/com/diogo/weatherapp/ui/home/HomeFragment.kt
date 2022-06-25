@@ -47,7 +47,6 @@ class HomeFragment : Fragment() {
         //Updates ui after page loads
         updateUi()
 
-        //Bind Click
         return root
     }
 
@@ -58,7 +57,7 @@ class HomeFragment : Fragment() {
 
     private fun getName(names: WeatherData.LocalNames, languageId: String): String {
         //Todo: better handle local names
-        return if (languageId == "pt" || names.en==null) {
+        return if (languageId == "pt" || names.en == null) {
             names.pt.toString()
         } else {
             names.en.toString()
@@ -72,7 +71,6 @@ class HomeFragment : Fragment() {
             ) else it.toString()
         }
     }
-
 
 
     private fun updateUi() {
@@ -141,18 +139,20 @@ class HomeFragment : Fragment() {
                     daily?.removeAt(0)
 
                     val adapter = DailyAdapter(daily)
-                    
+
                     //Handles item click
                     adapter.onItemClick = { daily ->
-                        val intent:Intent = DetailedViewActivity.createIntent(context, //Create intent
-                            Gson().toJson(daily)); //Convert clicked data into gson to be passed to new activity
+                        val intent: Intent = DetailedViewActivity.createIntent(
+                            context, //Create intent
+                            Gson().toJson(daily)
+                        ); //Convert clicked data into gson to be passed to new activity
                         startActivity(intent);
                     }
 
                     rvDaily.adapter = adapter
                     rvDaily.layoutManager = LinearLayoutManager(context)
 
-                   // rvDaily.setOnItemClickListener {}
+                    // rvDaily.setOnItemClickListener {}
                     //Shows elements after grabbing data
                     binding.currentWeatherCard.visibility = View.VISIBLE
                     hideLoader()
