@@ -141,10 +141,9 @@ class WeatherData {
         @SerializedName("name") var name: String? = null,
 
         @SerializedName("country") var country: String? = null,
-        @SerializedName("local_names") var localNames : LocalNames? = null,
+        @SerializedName("local_names") var localNames: LocalNames? = null,
 
         )
-
 
 
     interface WeatherApi {
@@ -158,8 +157,6 @@ class WeatherData {
             @Query("lang") langId: String? = "en",
             @Query("units") units: String? = "metric",
             @Query("exclude") exclude: String? = "minutely"
-
-
         ): Response<WeatherData>
     }
 

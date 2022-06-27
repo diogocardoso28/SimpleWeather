@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.diogo.weatherapp.DetailedViewActivity
 import com.diogo.weatherapp.R
 import com.diogo.weatherapp.databinding.FragmentHomeBinding
@@ -72,17 +71,28 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private suspend fun getWeatherData(locaton: WeatherData.LocationData): WeatherData.WeatherData? {
+        //TODO: cache information to reduce network usage - https://stackoverflow.com/questions/57758314/store-custom-kotlin-data-class-to-disk
+        val weatherApi = RetrofitHelper.getInstance().create(WeatherData.WeatherApi::class.java)
+        //Sets latitude and longitude based on provided city
+        val lat: Double? = locaton.lat
+        val lon: Double? = locaton.lon
+
+        //Reads current language and calls one call api to get weather data
+        val languageID: String = getString(R.string.languageId)
+        val weatherResult = weatherApi.getWeather(lat, lon, languageID)
+        return weatherResult.body()
+
+    }
 
     private fun updateUi() {
         try {
-            val weatherApi = RetrofitHelper.getInstance().create(WeatherData.WeatherApi::class.java)
             val locationApi =
                 RetrofitHelper.getInstance().create(WeatherData.LocationApi::class.java)
 
             // launching a new coroutine
             GlobalScope.launch {
                 //Shows Spinner Thing
-
                 binding.loader.visibility = View.VISIBLE
                 //Gets coordinates based on city
                 val city = "Leiria"
@@ -93,16 +103,10 @@ class HomeFragment : Fragment() {
                 Log.d("location", locationResult.body().toString())
 
 
-                //Sets latitude and longitude based on provided city
-                val lat: Double? = locationBody?.lat
-                val lon: Double? = locationBody?.lon
-
                 //Reads current language and calls one call api to get weather data
                 val languageID: String = getString(R.string.languageId)
-                val weatherResult = weatherApi.getWeather(lat, lon, languageID)
-
+                val body = locationBody?.let { getWeatherData(it) }
                 //Check if it got something
-                val body = weatherResult.body()
                 //Logs Response to logcat
                 Log.d("WeatherData ", body.toString())
                 Log.d("Current", body?.current?.weather.toString())
@@ -131,7 +135,7 @@ class HomeFragment : Fragment() {
 
 
                     //Puts rest of the week
-                    val rvDaily = binding.recyclerView as RecyclerView
+                    val rvDaily = binding.recyclerView
 
                     val daily = body?.daily
 
@@ -141,12 +145,12 @@ class HomeFragment : Fragment() {
                     val adapter = DailyAdapter(daily)
 
                     //Handles item click
-                    adapter.onItemClick = { daily ->
+                    adapter.onItemClick = { dailyData ->
                         val intent: Intent = DetailedViewActivity.createIntent(
                             context, //Create intent
-                            Gson().toJson(daily)
-                        ); //Convert clicked data into gson to be passed to new activity
-                        startActivity(intent);
+                            Gson().toJson(dailyData)
+                        ) //Convert clicked data into gson to be passed to new activity
+                        startActivity(intent)
                     }
 
                     rvDaily.adapter = adapter

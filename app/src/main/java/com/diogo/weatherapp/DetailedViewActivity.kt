@@ -24,14 +24,19 @@ class DetailedViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detailed_view)
 
         //Put data on to xml and then show it
-        val dailyString: String = intent.extras?.get(DAILY_DATA) as String;
+        val dailyString: String = intent.extras?.get(DAILY_DATA) as String
 
-        val daily: WeatherData.Daily = Gson().fromJson(dailyString, WeatherData.Daily::class.java);
-        val minTemperatureTextView: TextView = findViewById<TextView>(R.id.minTemperature);
-        val maxTemperatureTextView: TextView = findViewById<TextView>(R.id.maxTemperature);
-        val dailyDateTextView: TextView = findViewById<TextView>(R.id.dailyDate);
-        val iconImageView: ImageView = findViewById<ImageView>(R.id.iconImageView);
+        val daily: WeatherData.Daily = Gson().fromJson(dailyString, WeatherData.Daily::class.java)
+        val minTemperatureTextView: TextView = findViewById<TextView>(R.id.minTemperature)
+        val maxTemperatureTextView: TextView = findViewById<TextView>(R.id.maxTemperature)
+        val dailyDateTextView: TextView = findViewById<TextView>(R.id.dailyDate)
+        val uvIndexTextView: TextView = findViewById<TextView>(R.id.uvIndex)
+        val humidityTextView: TextView = findViewById<TextView>(R.id.humidity)
+        val chanceOfRainTextView: TextView = findViewById<TextView>(R.id.chanceOfRain)
+        val iconImageView: ImageView = findViewById<ImageView>(R.id.iconImageView)
 
+
+        //Handles date
         val longDt = daily.dt?.toLong() //Gets epoch time stamp
         val icon = daily.weather.get(0).icon.toString()
         //Parses it
@@ -43,22 +48,32 @@ class DetailedViewActivity : AppCompatActivity() {
 
         //Put data on to XML
         if (dt != null) {
-            dailyDateTextView.text = dt.format(DateTimeFormatter.ofPattern("EEEE ,d MMMM"))
-        };
-        minTemperatureTextView.text = daily.temp?.max?.roundToInt().toString() + "º";
-        maxTemperatureTextView.text = daily.temp?.min?.roundToInt().toString() + "º";
+            dailyDateTextView.text = dt.format(DateTimeFormatter.ofPattern("EEEE, d MMMM"))
+        }
+        //Places maximum and minimum temperature
+        val minimum = daily.temp?.max?.roundToInt().toString()
+        minTemperatureTextView.text = "$minimum º"
+        maxTemperatureTextView.text = daily.temp?.min?.roundToInt().toString()
 
+
+        //Gets imageview context and places appropriate icon
         val context: Context = iconImageView.context
-
-        Log.d("ICON", icon);
-
-        val id = context.resources.getIdentifier("ic_" + icon, "drawable", context.packageName)
+        val id = context.resources.getIdentifier("ic_$icon", "drawable", context.packageName)
         iconImageView.setImageResource(id)
+
+        //Sets UvIndex
+        uvIndexTextView.text = daily.uvi?.roundToInt().toString()
+        //Sets Rain Percentage
+        val precipitation = (daily.pop?.times(100)?.roundToInt()).toString()
+        chanceOfRainTextView.text = "$precipitation%"
+        //Sets humidity
+        val humidity = daily.humidity.toString()
+        humidityTextView.text = "$humidity%"
 
     }
 
     companion object {
-        private val DAILY_DATA: String = "WEATHER";
+        private val DAILY_DATA: String = "WEATHER"
         fun createIntent(context: Context?, weatherData: String?): Intent {
             return Intent(context, DetailedViewActivity::class.java).putExtra(
                 DAILY_DATA,

@@ -8,4 +8,7 @@
     <string name="title_home">Visao Geral</string>
     <string name="languageId">pt</string>
     <string name="line_separator">Separador</string>
+    <string name="chance_of_rain">Prob. Precipitação</string>
+    <string name="humidity">Humidade</string>
+    <string name="uv_index">Índice UV</string>
 </resources>

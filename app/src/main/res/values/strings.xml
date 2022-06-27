@@ -7,4 +7,7 @@
     <string name="errorMessage">Error!</string>
     <string name="languageId">en</string>
     <string name="line_separator">Line Separator</string>
+    <string name="chance_of_rain">Chance of Rain</string>
+    <string name="humidity">Humidity</string>
+    <string name="uv_index">Uv Index</string>
 </resources>

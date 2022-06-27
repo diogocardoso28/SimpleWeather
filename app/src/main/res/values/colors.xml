@@ -9,6 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="textPrimary">#FF000000</color>
     <color name="textSecondary">#424242</color>
-
     <color name="semiTransparentColor">#25ffffff</color>
+    <color name="blue">#0044FF</color>
 </resources>
