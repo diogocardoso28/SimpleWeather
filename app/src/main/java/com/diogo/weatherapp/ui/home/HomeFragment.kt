@@ -182,6 +182,15 @@ class HomeFragment : Fragment() {
                     val rvDaily = binding.recyclerView
 
                     val daily = body?.daily
+                    val today = daily?.get(0)
+                    binding.currentWeatherCard.setOnClickListener {
+                        //Access view by using `it`
+                        val intent: Intent = DetailedViewActivity.createIntent(
+                            context, //Create intent
+                            Gson().toJson(today)
+                        ) //Convert clicked data into gson to be passed to new activity
+                        startActivity(intent)
+                    }
 
                     //Removes today's weather from the list
                     daily?.removeAt(0)

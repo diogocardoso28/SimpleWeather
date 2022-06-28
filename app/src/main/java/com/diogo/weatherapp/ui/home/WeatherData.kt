@@ -147,7 +147,7 @@ class WeatherData {
 
 
     interface WeatherApi {
-        @GET("/data/2.5/onecall?lat=39.7495&lon=-8.8077&appid=${BuildConfig.OWM_KEY}")
+        @GET("/data/2.5/onecall?appid=${BuildConfig.OWM_KEY}")
         suspend fun getWeather(
             //If no coordinates are provided, default to center of europe
             @Query("lat") lat: Double? = 54.5260,
