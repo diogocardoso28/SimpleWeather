@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.diogo.weatherapp.DetailedViewActivity
 import com.diogo.weatherapp.R
 import com.diogo.weatherapp.databinding.FragmentHomeBinding
 import com.google.gson.Gson
@@ -19,6 +18,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -71,17 +72,60 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private suspend fun getWeatherData(locaton: WeatherData.LocationData): WeatherData.WeatherData? {
-        //TODO: cache information to reduce network usage - https://stackoverflow.com/questions/57758314/store-custom-kotlin-data-class-to-disk
-        val weatherApi = RetrofitHelper.getInstance().create(WeatherData.WeatherApi::class.java)
-        //Sets latitude and longitude based on provided city
-        val lat: Double? = locaton.lat
-        val lon: Double? = locaton.lon
+    private suspend fun getWeatherData(locaton: WeatherData.LocationData): WeatherData.WeatherData {
+        var result = WeatherData.WeatherData()
+        val filename = "weather"
+        var cacheFile = File(context?.cacheDir, filename)
+        var pullFromApi = true
+        if (cacheFile.exists()) {
+            val lastModified = Date(cacheFile.lastModified()).time
+            val currTime = (java.util.Calendar.getInstance()).time.time
+            val diff: Long = currTime - lastModified
+            val seconds = diff / 1000
+            val minutes = seconds / 60
+            Log.d("TimeDiff", minutes.toString())
+            if (minutes < 30) //If data is newer than 30 minutes don't pull from the api
+                pullFromApi = false
+        }
 
-        //Reads current language and calls one call api to get weather data
-        val languageID: String = getString(R.string.languageId)
-        val weatherResult = weatherApi.getWeather(lat, lon, languageID)
-        return weatherResult.body()
+        if (!pullFromApi) {
+            Log.d("REQ", "Pulled from Filesystem")
+            val readBytes = cacheFile.readBytes()
+            val WeatherDataJson = String(readBytes)
+            //  Log.d("ReadFromFile", WeatherDataJson)
+            result = Gson().fromJson(WeatherDataJson, WeatherData.WeatherData::class.java)
+        } else {
+            Log.d("REQ", "Pulled from web")
+            val weatherApi =
+                RetrofitHelper.getInstance().create(WeatherData.WeatherApi::class.java)
+            //Sets latitude and longitude based on provided city
+            val lat: Double? = locaton.lat
+            val lon: Double? = locaton.lon
+
+            //Reads current language and calls one call api to get weather data
+            val languageID: String = getString(R.string.languageId)
+            val weatherResult = weatherApi.getWeather(lat, lon, languageID)
+            result = weatherResult.body()!!
+
+
+            val resultByteArray = Gson().toJson(result).toByteArray()
+            try {
+                File.createTempFile(filename, null, context?.cacheDir)
+                cacheFile = File(context?.cacheDir, filename)
+                cacheFile.writeBytes(resultByteArray);
+
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+        return result
 
     }
 
@@ -100,7 +144,7 @@ class HomeFragment : Fragment() {
 
                 //Parses body
                 val locationBody = locationResult.body()?.get(0)
-                Log.d("location", locationResult.body().toString())
+                //Log.d("location", locationResult.body().toString())
 
 
                 //Reads current language and calls one call api to get weather data
@@ -108,8 +152,8 @@ class HomeFragment : Fragment() {
                 val body = locationBody?.let { getWeatherData(it) }
                 //Check if it got something
                 //Logs Response to logcat
-                Log.d("WeatherData ", body.toString())
-                Log.d("Current", body?.current?.weather.toString())
+                ///Log.d("WeatherData ", body.toString())
+                //Log.d("Current", body?.current?.weather.toString())
 
 
                 activity?.runOnUiThread {

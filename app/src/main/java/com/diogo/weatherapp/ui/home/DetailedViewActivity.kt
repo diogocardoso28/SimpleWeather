@@ -1,15 +1,14 @@
-package com.diogo.weatherapp
+package com.diogo.weatherapp.ui.home
 
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.diogo.weatherapp.ui.home.WeatherData
+import com.diogo.weatherapp.R
 import com.google.gson.Gson
 import java.time.Instant
 import java.time.ZoneId

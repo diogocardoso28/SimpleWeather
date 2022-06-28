@@ -7,7 +7,7 @@
     android:background="@color/blue"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".DetailedViewActivity">
+    tools:context=".ui.home.DetailedViewActivity">
 
     <com.google.android.material.card.MaterialCardView
         style="@style/DetailedCardViewStyle"
@@ -32,9 +32,7 @@
                     android:layout_height="wrap_content"
                     android:cropToPadding="false"
                     android:scaleType="center"
-                    app:srcCompat="@drawable/ic_01d">
-
-                </ImageView>
+                    app:srcCompat="@drawable/ic_01d" />
 
             </LinearLayout>
 
