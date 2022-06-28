@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
             val seconds = diff / 1000
             val minutes = seconds / 60
             Log.d("TimeDiff", minutes.toString())
-            if (minutes < 30) //If data is newer than 30 minutes don't pull from the api
+            if (minutes < 60) //If data is newer than 30 minutes don't pull from the api
                 pullFromApi = false
         }
 
